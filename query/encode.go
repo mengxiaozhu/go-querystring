@@ -272,7 +272,7 @@ func valueString(v reflect.Value, opts tagOptions) string {
 
 	}
 
-	return fmt.Sprint(v.Interface())
+	return opts.StringValue(v.Interface())
 }
 
 // isEmptyValue checks if a value should be considered empty for the purposes
@@ -319,6 +319,14 @@ func (o tagOptions) Contains(option string) bool {
 		}
 	}
 	return false
+}
+func (o tagOptions) StringValue(value interface{}) string {
+	for _, v := range o {
+		if strings.HasPrefix(v, "default:") {
+			return v[8:]
+		}
+	}
+	return fmt.Sprint(value)
 }
 func (o tagOptions) TimeFormat(t time.Time) (string) {
 	for _, v := range o {
