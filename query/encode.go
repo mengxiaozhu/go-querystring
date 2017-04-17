@@ -266,8 +266,10 @@ func valueString(v reflect.Value, opts tagOptions) string {
 		t := v.Interface().(time.Time)
 		if opts.Contains("unix") {
 			return strconv.FormatInt(t.Unix(), 10)
+		} else {
+			return opts.TimeFormat(t)
 		}
-		return t.Format(time.RFC3339)
+
 	}
 
 	return fmt.Sprint(v.Interface())
@@ -317,4 +319,12 @@ func (o tagOptions) Contains(option string) bool {
 		}
 	}
 	return false
+}
+func (o tagOptions) TimeFormat(t time.Time) (string) {
+	for _, v := range o {
+		if strings.HasPrefix(v, "format:") {
+			return t.Format(v[7:])
+		}
+	}
+	return t.Format(time.RFC3339)
 }

@@ -33,7 +33,7 @@ func TestValues_types(t *testing.T) {
 	}{
 		{
 			// basic primitives
-			struct {
+				struct {
 				A string
 				B int
 				C uint
@@ -50,7 +50,7 @@ func TestValues_types(t *testing.T) {
 		},
 		{
 			// pointers
-			struct {
+				struct {
 				A *string
 				B *int
 				C **string
@@ -69,7 +69,7 @@ func TestValues_types(t *testing.T) {
 		},
 		{
 			// slices and arrays
-			struct {
+				struct {
 				A []string
 				B []string `url:",comma"`
 				C []string `url:",space"`
@@ -111,7 +111,7 @@ func TestValues_types(t *testing.T) {
 		},
 		{
 			// other types
-			struct {
+				struct {
 				A time.Time
 				B time.Time `url:",unix"`
 				C bool      `url:",int"`
@@ -130,7 +130,7 @@ func TestValues_types(t *testing.T) {
 			},
 		},
 		{
-			struct {
+				struct {
 				Nest Nested `url:"nest"`
 			}{
 				Nested{
@@ -145,7 +145,7 @@ func TestValues_types(t *testing.T) {
 			},
 		},
 		{
-			struct {
+				struct {
 				Nest Nested `url:"nest"`
 			}{
 				Nested{
@@ -324,5 +324,12 @@ func TestTagParsing(t *testing.T) {
 		if opts.Contains(tt.opt) != tt.want {
 			t.Errorf("Contains(%q) = %v", tt.opt, !tt.want)
 		}
+	}
+}
+func TestTagOptions_TimeFormat(t *testing.T) {
+	tag := tagOptions{"format:20060102150405"}
+	str := tag.TimeFormat(time.Date(2017, 1, 1, 1, 1, 1, 0, time.Local))
+	if str != "20170101010101" {
+		t.Error(str, "!=", "20170101010101")
 	}
 }
